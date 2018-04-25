@@ -43,12 +43,12 @@ public class LanguageCorpus {
 	
 	public void exportCorpusToFile(FileWriter file) throws IOException {
 		PrintWriter writer = new PrintWriter(file);
-		writer.println(String.format("Number of words: %d", getNumberOfWords()));
+		writer.print(String.format("Number of words: %d", getNumberOfWords()));
 		 
 	    Iterator<Entry<String, Integer>> it = getCorpus().entrySet().iterator();
 	    while (it.hasNext()) {
 	    	Map.Entry token = (Map.Entry) it.next();
-	    	writer.println((String) token.getKey());
+	    	writer.println(((String) token.getKey()));
 	    }
 	    writer.close();
 	}
@@ -69,9 +69,8 @@ public class LanguageCorpus {
 	private void scanMessages() {
 		String token = getScanner().nextToken();
 		while (token != null) {
+			addTokenToCorpus(token);
 			token = scanner.nextToken();
-			if (token != null)
-				addTokenToCorpus(token);
 		}
 	}
 }

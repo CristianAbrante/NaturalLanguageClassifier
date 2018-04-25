@@ -33,7 +33,7 @@ public class MessageScanner {
 	private void initializeMessagePatternBuffer() {
 		messagePatternBuffer = "";
 		for (MessageTokens token : MessageTokens.values()) {
-			messagePatternBuffer += token.getPattern();
+			messagePatternBuffer += token.getPattern() + "|";
 		}
 	}
 }
