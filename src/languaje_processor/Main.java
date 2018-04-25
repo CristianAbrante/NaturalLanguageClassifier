@@ -1,18 +1,19 @@
 package languaje_processor;
 
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
 
-	public static void main(String[] args) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		MessageScanner scanner = new MessageScanner("src/data/test.txt");
-		//System.out.println(scanner.getMessageList());
-		String token;
-		do {
-			token = scanner.nextToken();
-			System.out.println(token);
-		} while (token != null);
+	public static void main(String[] args) throws IOException {
+		if (args.length == 2) {
+			MessageScanner scanner = new MessageScanner(args[0]);
+			LanguageCorpus corpus = new LanguageCorpus(scanner);
+			FileWriter file = new FileWriter(args[1]);
+			corpus.exportCorpusToFile(file);			
+		} else {
+			System.err.println("You must specifie input file and output file");
+		}
 	}
 
 }
