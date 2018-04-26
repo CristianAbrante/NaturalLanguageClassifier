@@ -3,8 +3,17 @@ package languaje_processor;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * The Class Main.
+ */
 public class Main {
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void main(String[] args) throws IOException {
 		if (args.length == 2) {
 			MessageScanner scanner = new MessageScanner(args[0]);
