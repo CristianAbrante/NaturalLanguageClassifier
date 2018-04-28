@@ -22,6 +22,7 @@ public class MessageScanner {
 	/** The matcher. */
 	private Matcher matcher;
 	
+	private Integer numberOfMessages;
 	/**
 	 * Instantiates a new message scanner.
 	 *
@@ -31,18 +32,10 @@ public class MessageScanner {
 	@SuppressWarnings("resource")
 	public MessageScanner(String filePath) throws FileNotFoundException {
 		messageList = new Scanner(new File(filePath)).useDelimiter("\\Z").next();
+		setNumberOfMessages(messageList.split("\\n").length);
 		initializeMessagePatternBuffer();
 		messagePattern = Pattern.compile(messagePatternBuffer);
 		matcher = messagePattern.matcher(messageList);
-	}
-	
-	/**
-	 * Gets the message list.
-	 *
-	 * @return the message list
-	 */
-	public String getMessageList() {
-		return messageList;
 	}
 	
 	/**
@@ -52,7 +45,12 @@ public class MessageScanner {
 	 */
 	public String nextToken() {
 		if (matcher.find()) {
-			return matcher.group(0);
+			if (Character.isUpperCase(matcher.group().charAt(0))) { // Si empieza por mayus
+				String input = matcher.group();
+				return input.substring(0, 1).toLowerCase() + input.substring(1);
+			}else {
+				return matcher.group();
+			}
 		} else {
 			return null;
 		}		
@@ -62,9 +60,59 @@ public class MessageScanner {
 	 * Initialize message pattern buffer.
 	 */
 	private void initializeMessagePatternBuffer() {
-		messagePatternBuffer = "";
-		for (MessageTokens token : MessageTokens.values()) {
-			messagePatternBuffer += token.getPattern() + "|";
+		messagePatternBuffer = new String();
+		for (int i = 0; i < MessageTokens.values().length; i++) {
+			if (i == MessageTokens.values().length - 1) {
+				messagePatternBuffer += MessageTokens.values()[i].getPattern();
+			}else {
+				messagePatternBuffer += MessageTokens.values()[i].getPattern() + "|";
+			}
 		}
+	}
+	
+	public void resetParser() {
+		matcher = messagePattern.matcher(messageList);
+	}
+	
+	/** Getters and Setters **/
+
+	public String getMessagePatternBuffer() {
+		return messagePatternBuffer;
+	}
+
+	public void setMessagePatternBuffer(String messagePatternBuffer) {
+		this.messagePatternBuffer = messagePatternBuffer;
+	}
+
+	public Pattern getMessagePattern() {
+		return messagePattern;
+	}
+
+	public void setMessagePattern(Pattern messagePattern) {
+		this.messagePattern = messagePattern;
+	}
+
+	public Matcher getMatcher() {
+		return matcher;
+	}
+
+	public void setMatcher(Matcher matcher) {
+		this.matcher = matcher;
+	}
+
+	public Integer getNumberOfMessages() {
+		return numberOfMessages;
+	}
+
+	public void setNumberOfMessages(Integer numberOfMessages) {
+		this.numberOfMessages = numberOfMessages;
+	}
+
+	public String getMessageList() {
+		return messageList;
+	}
+	
+	public void setMessageList(String messageList) {
+		this.messageList = messageList;
 	}
 }

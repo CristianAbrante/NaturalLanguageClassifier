@@ -23,6 +23,8 @@ public enum MessageTokens {
 		this.pattern = pattern;
 	}
 
+	/** Getters and Setters **/
+	
 	/**
 	 * Gets the pattern.
 	 *
