@@ -1,5 +1,6 @@
 package languaje_processor;
 
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -17,7 +18,8 @@ public class Main {
 		if (args.length == 2) {
 			MessageScanner parser = new MessageScanner(args[0]);
 			Vocabulary vocabulary = new Vocabulary(parser);
-			vocabulary.exportVocabularyToFile(); // Este se exporta por defecto a vocabulario.txt
+			FileWriter outputFile = new FileWriter("vocabulary.txt");
+			vocabulary.export(outputFile); 
 			
 			Corpus corpus = new Corpus(parser, vocabulary);
 			//FileWriter file = new FileWriter(args[1]);

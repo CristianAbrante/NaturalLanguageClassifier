@@ -12,6 +12,9 @@ import java.util.TreeSet;
  */
 public class Vocabulary {
 	
+  private final String UNKNOWN_TOKEN = "<unk>";
+  private final int UNKNOWN_TOKEN_COUNTER = 1;
+  
 	private Set<String> words;
 	private MessageScanner scanner;
 	
@@ -21,61 +24,63 @@ public class Vocabulary {
 		scanMessagesToVocabulary();
 	}
 	
-	private void scanMessagesToVocabulary() {
-		String token = getScanner().nextToken();
-		while (token != null) {
-			addToVocabylary(token);
-			token = scanner.nextToken();
-		}
-	}
+	public Set<String> getWords() {
+    return words;
+  }
 	
 	public void addToVocabylary(String token) {
-		getWords().add(token);
+	  if (token != null) {
+	    getWords().add(token);	    
+	  } else {
+	    throw new NullPointerException("token can't be null");
+	  }
 	}
 	
 	public int getNumberOfWords() {
-		return getWords().size();
+		return getWords().size() + UNKNOWN_TOKEN_COUNTER;
 	}
 	
-	public void exportVocabularyToFile() throws IOException {
-		FileWriter file = new FileWriter("data/vocabulario.txt");
+	public void export(FileWriter file) throws IOException {
 		PrintWriter writer = new PrintWriter(file);
 		writer.println(String.format("Number of words: %d", getNumberOfWords()));
-		 
-	    Iterator<String> it = getWords().iterator();
-	    while (it.hasNext()) {
-			String token = it.next();
-	    	writer.println(token);
-	    }
-	    writer.close();
-	}
-
-	public String getWord(String word) throws Exception {
-		Iterator<String> it = getWords().iterator();
-		String token = new String();
-		while (it.hasNext()) {
-			token = it.next();
-			if (word.equals(token))
-				return token;			
+		writer.println(UNKNOWN_TOKEN);
+		for (String word : getWords()) {
+		  writer.println(word);
 		}
-		throw new Exception("Can not find this word in the set of words");
+    writer.close();
+	}
+	
+	public boolean contains(String word) {
+	  Iterator<String> it = getWords().iterator();
+	  String token = new String();
+	  while(it.hasNext()) {
+	    token = it.next();
+	    if (word.equals(token)) {
+	      return true;
+	    }
+	  }
+	  return false;
 	}
 	
 	/** Getters and Setters **/
 
-	public Set<String> getWords() {
-		return words;
-	}
-
-	public void setWords(Set<String> words) {
-		this.words = words;
-	}
-
-	public MessageScanner getScanner() {
+	private MessageScanner getScanner() {
 		return scanner;
 	} 
 
-	public void setScanner(MessageScanner scanner) {
-		this.scanner = scanner;
+	private void setScanner(MessageScanner scanner) {
+	  if (scanner != null) {
+	    this.scanner = scanner;	    
+	  } else {
+	    throw new NullPointerException("scanner can't be null");
+	  }
 	}
+	
+	private void scanMessagesToVocabulary() {
+	  String token = getScanner().nextToken();
+    while (token != null) {
+      addToVocabylary(token);
+      token = getScanner().nextToken();
+    }
+  }
 }
