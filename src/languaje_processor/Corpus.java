@@ -1,6 +1,8 @@
 package languaje_processor;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,32 +10,39 @@ import java.util.TreeMap;
 
 public class Corpus {
 
-	private Map<String, Integer> corpus;
-
-	private MessageScanner parser;
-
+	private TreeMap<String, Integer> corpus;
+	private MessageScanner scanner;
 	private Vocabulary vocabulary;
-
-	public Corpus(MessageScanner parser, Vocabulary vocabulary) {
-		this.corpus = new TreeMap<String, Integer>();
+	private String name;
+	
+	public Corpus(String name, Vocabulary vocabulary, MessageScanner parser) {
+		setCorpus(new TreeMap<String, Integer>());
 		setScanner(parser);
 		setVocabulary(vocabulary);
 		parser.resetParser();
-		scanMessagesToCorpus();
+		addTokensToCorpus();
 	}
+	
+	/**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	private void scanMessagesToCorpus() {
-		String token = getScanner().nextToken();
-		while (token != null) {
-			addTokenToCorpus(token);
-			token = parser.nextToken();
-		}
-		// Check the tree and remove tokens with low appearances
-		setNumberOfUnknownTokens();
-	}
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    if (name != null) {
+      this.name = name;      
+    } else {
+      throw new NullPointerException("name can't be null");
+    }
+  }
 
-	private void addTokenToCorpus(String token) {
-		if (tokenInCorpus(token)) {
+  private void addToCorpus(String token) {
+		if (this.contains(token)) {
 			int times = getCorpus().get(token);
 			getCorpus().put(token, times + 1);
 		} else {
@@ -41,45 +50,39 @@ public class Corpus {
 		}
 	}
 
-	public boolean tokenInCorpus(String token) {
-		if (token != null) {
-			return getCorpus().containsKey(token);
+	public boolean contains(String word) {
+		if (word != null) {
+			return getCorpus().containsKey(word);
 		} else {
 			throw new NullPointerException("token can't be null");
 		}
 	}
 
-	private void setNumberOfUnknownTokens() {
-		Map<String, Integer> tempMap = new TreeMap<String, Integer>();
-		Iterator<Entry<String, Integer>> it = getCorpus().entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String, Integer> entry = it.next();
-			Integer value = entry.getValue();
-			if (value < 3) {
-				String unknown = "unknown";
-				if (tempMap.containsKey(unknown)) {
-					int times = tempMap.get(unknown);
-					tempMap.put(unknown, times + 1);
-				} else {
-					tempMap.put(unknown, 1);
-				}
-				it.remove();
-			}
-		}
-		getCorpus().putAll(tempMap);
+	public void export(FileWriter file) throws IOException {
+	  PrintWriter writer = new PrintWriter(file);
+    writer.println(String.format("Number of messages: %d", getNumberOfMessages()));
+    writer.println(String.format("Number of words in corpus: %d", getNumberOfWords()));
+    for (Map.Entry<String, Integer> entry: getCorpus().entrySet()) {
+      String word = entry.getKey();
+      writer.println(String.format("%s %d %.8f", word, getFrecuency(word), getLogProb(word)));       
+    }
+    writer.close();
 	}
 
-	public void exportCorpusToFile() throws IOException {
-		// TODO
+	public Double getLogProb(String word) {
+	  if (word != null) {
+	    return ((double) (getFrecuency(word) + 1)) / ((double) (getNumberOfWords() + getVocabulary().getNumberOfWords()));   
+	  } else {
+	    throw new NullPointerException("word can't be null");
+	  }
 	}
 
-	public Double getLogProb() {
-		// TODO
-		return null;
-	}
-
-	public Integer getFrecuency(String token) {
-		return getCorpus().get(token);
+	public Integer getFrecuency(String word) {
+	  if (word != null) {
+	    return contains(word) ? getCorpus().get(word) : 0;	    
+	  } else {
+	    throw new NullPointerException("word can't be null");
+	  }
 	}
 
 	public Integer getNumberOfMessages() {
@@ -92,27 +95,67 @@ public class Corpus {
 
 	/** Getters and Setters **/
 
-	public Map<String, Integer> getCorpus() {
+	private TreeMap<String, Integer> getCorpus() {
 		return corpus;
 	}
 
-	public void setCorpus(TreeMap<String, Integer> corpus) {
-		this.corpus = corpus;
+	private void setCorpus(TreeMap<String, Integer> corpus) {
+	  if (corpus != null) {
+	    this.corpus = corpus;	    
+	  } else {
+	    throw new NullPointerException("corpus can't be null");
+	  }
 	}
 
-	public MessageScanner getScanner() {
-		return parser;
+	private MessageScanner getScanner() {
+		return scanner;
 	}
 
-	public void setScanner(MessageScanner parser) {
-		this.parser = parser;
+	private void setScanner(MessageScanner parser) {
+	  if (parser != null) {
+	    this.scanner = parser;	    
+	  } else {
+	    throw new NullPointerException("parser can't be null");
+	  }
 	}
 
-	public Vocabulary getVocabulary() {
+	private Vocabulary getVocabulary() {
 		return vocabulary;
 	}
 
-	public void setVocabulary(Vocabulary vocabulary) {
-		this.vocabulary = vocabulary;
+	private void setVocabulary(Vocabulary vocabulary) {
+	  if (vocabulary != null) {
+	    this.vocabulary = vocabulary;	    
+	  } else {
+	    throw new NullPointerException("vocabulary can't be null");
+	  }
 	}
+	
+	private void addTokensToCorpus() {
+    String token = getScanner().nextToken();
+    while (token != null) {
+      addToCorpus(token);
+      token = getScanner().nextToken();
+    }
+  }
+	
+	private void setNumberOfUnknownTokens() {
+    Map<String, Integer> tempMap = new TreeMap<String, Integer>();
+    Iterator<Entry<String, Integer>> it = getCorpus().entrySet().iterator();
+    while (it.hasNext()) {
+      Entry<String, Integer> entry = it.next();
+      Integer value = entry.getValue();
+      if (value < 3) {
+        String unknown = "unknown";
+        if (tempMap.containsKey(unknown)) {
+          int times = tempMap.get(unknown);
+          tempMap.put(unknown, times + 1);
+        } else {
+          tempMap.put(unknown, 1);
+        }
+        it.remove();
+      }
+    }
+    getCorpus().putAll(tempMap);
+  }
 }

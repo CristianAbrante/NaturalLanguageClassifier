@@ -21,7 +21,7 @@ public class Vocabulary {
 	public Vocabulary(MessageScanner scanner) {
 		words = new TreeSet<String>();
 		setScanner(scanner);
-		scanMessagesToVocabulary();
+		addTokensToVocabulary();
 	}
 	
 	public Set<String> getWords() {
@@ -76,7 +76,7 @@ public class Vocabulary {
 	  }
 	}
 	
-	private void scanMessagesToVocabulary() {
+	private void addTokensToVocabulary() {
 	  String token = getScanner().nextToken();
     while (token != null) {
       addToVocabylary(token);
