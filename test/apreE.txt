@@ -1,0 +1,7 @@
+Número de documentos del corpus: 2
+Número de palabras del corpus: 6
+Palabra:actor Frec:1 LogProb:0,14285714
+Palabra:buen Frec:1 LogProb:0,14285714
+Palabra:chocolate Frec:1 LogProb:0,14285714
+Palabra:sublime Frec:1 LogProb:0,14285714
+Palabra:un Frec:2 LogProb:0,21428571

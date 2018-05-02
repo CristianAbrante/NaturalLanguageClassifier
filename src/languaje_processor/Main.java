@@ -7,27 +7,45 @@ import java.io.IOException;
  * The Class Main.
  */
 public class Main {
+	/*
+	 * Params:
+	 * data/corpusTotal.txt data/vocabulary.txt data/corpusA.txt
+	 * data/aprendizajeA.txt data/corpusD.txt data/aprendizajeD.txt
+	 * data/corpusI.txt data/aprendizajeI.txt
+	 */
 
 	/**
 	 * The main method.
 	 *
-	 * @param args the arguments
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @param args
+	 *            the arguments
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void main(String[] args) throws IOException {
-		//if (args.length == 2) {
-			MessageScanner parserVocabulary = new MessageScanner("data/corpusTotal.txt");
+		if (args.length == 8) {
+			MessageScanner parserVocabulary = new MessageScanner(args[0]);
+			FileWriter outputVocabulary = new FileWriter(args[1]);
+			MessageScanner parserCorpusA = new MessageScanner(args[2]);
+			FileWriter outputCorpusA = new FileWriter(args[3]);
+			MessageScanner parserCorpusD = new MessageScanner(args[4]);
+			FileWriter outputCorpusD = new FileWriter(args[5]);
+			MessageScanner parserCorpusI = new MessageScanner(args[6]);
+			FileWriter outputCorpusI = new FileWriter(args[7]);
+
 			Vocabulary vocabulary = new Vocabulary(parserVocabulary);
-			vocabulary.export(new FileWriter("vocabulary.txt")); 
-			
-			MessageScanner parserCorpus= new MessageScanner("data/corpusA.txt");
-			Corpus corpusAction = new Corpus("action", vocabulary, parserCorpus);
-			corpusAction.export(new FileWriter("data/corpusA.out"));
-			//FileWriter file = new FileWriter(args[1]);
-			//corpus.exportCorpusToFile(file);	// Hay que decidir como hacemos lo del fichero pues se exporta a ficheros tal que aprendizaje<...>.txt, donde los ... son el tipo de mensaje
-//		} else {
-//			System.err.println("You must specifie input file and output file");
-//		}
+			vocabulary.export(outputVocabulary);
+
+			Corpus corpusA = new Corpus("action", vocabulary, parserCorpusA);
+			corpusA.export(outputCorpusA);
+			Corpus corpusD = new Corpus("dialog", vocabulary, parserCorpusD);
+			corpusD.export(outputCorpusD);
+			Corpus corpusI = new Corpus("information", vocabulary, parserCorpusI);
+			corpusI.export(outputCorpusI);
+		} else {
+			String error = "Must specify the following files: \n" + " - inputVolcabulary.txt";
+			System.err.println(error);
+		}
 	}
 
 }

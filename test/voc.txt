@@ -1,0 +1,9 @@
+Number of words: 8
+<unk>
+a
+actor
+buen
+chocolate
+good
+sublime
+un
