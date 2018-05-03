@@ -3,9 +3,7 @@ package languaje_processor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class Corpus {
@@ -32,8 +30,7 @@ public class Corpus {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		if (name != null) {
@@ -75,8 +72,8 @@ public class Corpus {
 
 	public Double getLogProb(String word) {
 		if (word != null) {
-			return ((double) (getFrecuency(word) + 1))
-					/ ((double) (getNumberOfWords() + getVocabulary().getNumberOfWords()));
+			return Math.log(((double) (getFrecuency(word) + 1))
+					/ ((double) (getNumberOfWords() + getVocabulary().getNumberOfWords())));
 		} else {
 			throw new NullPointerException("word can't be null");
 		}
