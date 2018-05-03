@@ -6,10 +6,16 @@ package languaje_processor;
 public enum MessageTokens {
 	
 	/** The url regexp. */
-	URL("(https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-z]{2,6}\\b[-a-zA-Z0-9@:%_\\+.~#?&//=]*)"),
+	URL("https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-z]{2,6}\\b[-a-zA-Z0-9@:%_\\+.~#?&//=]*"),
 	
 	/** The word regexp. */
-	WORD("([@#]?[\\w-_]+(?:'(?:m|s|re|ve|ll|d|t))?)");
+	WORD("[\\w-_]+(?:'(?:m|s|re|ve|ll|d|t))?"),
+	
+	HASHTAG("#[\\w-_]+"),
+	
+	NUMBER("[-+]?\\d+(?:(?:\\.\\d+)?(?:[Ee][-+]?\\d+)?)?"),
+	
+	MENTION("@[\\\\w-_]+");
 	
 	/** The pattern. */
 	private String pattern;
@@ -33,4 +39,6 @@ public enum MessageTokens {
 	public String getPattern() {
 		return pattern;
 	}
+	
+	
 }
