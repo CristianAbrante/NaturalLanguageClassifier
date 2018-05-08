@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import languaje_processor.token.TokenType;
+
 /**
  * The Class MessageScanner.
  */
@@ -61,11 +63,11 @@ public class MessageScanner {
 	 */
 	private void initializeMessagePatternBuffer() {
 		messagePatternBuffer = new String();
-		for (int i = 0; i < MessageTokens.values().length; i++) {
-			if (i == MessageTokens.values().length - 1) {
-				messagePatternBuffer += MessageTokens.values()[i].getPattern();
+		for (int i = 0; i < TokenType.values().length; i++) {
+			if (i == TokenType.values().length - 1) {
+				messagePatternBuffer += TokenType.values()[i].getPattern();
 			}else {
-				messagePatternBuffer += MessageTokens.values()[i].getPattern() + "|";
+				messagePatternBuffer += TokenType.values()[i].getPattern() + "|";
 			}
 		}
 	}
