@@ -1,5 +1,5 @@
-Number of words: 8
-<unk>
+8
+_UNK_
 a
 actor
 buen

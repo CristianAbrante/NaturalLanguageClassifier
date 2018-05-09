@@ -31,7 +31,7 @@ public class DocumentReader {
   /** The matcher. */
   private Matcher matcher;
   
-  private DocumentReader() {
+  public DocumentReader() {
     initializeMessagePatternBuffer();
     tokensPattern = Pattern.compile(tokensPatternBuffer);
   }

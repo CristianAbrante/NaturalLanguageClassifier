@@ -13,7 +13,7 @@ import languaje_processor.token.*;
 
 public class Corpus {
 	
-	private final Token UNKNOWN_TOKEN = new Token(TokenType.UNKNOWN.getValue());
+	private final Token UNKNOWN_TOKEN = new Token(TokenType.UNKNOWN.getValue(), 0, 0.0);
 	private Set<Token> corpus;
 	private Vocabulary vocabulary;
 	private String name;
@@ -21,6 +21,7 @@ public class Corpus {
 	private int numberOfWords = 0;
 	
 	public Corpus(String name, Vocabulary vocabulary, DocumentReader reader) {
+		setName(name);
 		setCorpus(new TreeSet<Token>());
 		setVocabulary(vocabulary);
 		if (reader != null) {
@@ -103,7 +104,7 @@ public class Corpus {
 		writer.println(String.format("%d", getNumberOfDocuments()));
 		writer.println(String.format("%d", getNumberOfWords()));
 		writer.println(
-		String.format("%s %d %.8f", UNKNOWN_TOKEN.getValue(), UNKNOWN_TOKEN.getFrecuency(), UNKNOWN_TOKEN.getLogProb()));
+		String.format("%s %d %f", UNKNOWN_TOKEN.getValue(), UNKNOWN_TOKEN.getFrecuency(), UNKNOWN_TOKEN.getLogProb()));
 		for (Token token : getCorpus()) {
 		  writer.println(
           String.format("%s %d %.8f", token.getValue(), token.getFrecuency(), token.getLogProb()));
@@ -142,7 +143,7 @@ public class Corpus {
 	private void addToken(Token token) {
 		numberOfWords += 1;
 		for (Token corpusToken : getCorpus()) {
-			if (token.getValue().equals(token.getValue())) {
+			if (corpusToken.getValue().equals(token.getValue())) {
 				corpusToken.incrementFrecuency();
 				return;
 			}
