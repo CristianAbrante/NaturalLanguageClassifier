@@ -4,10 +4,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * The Class PercentageCalculation.
+ */
 public class PercentageCalculation {
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		if (args.length == 2) {
 			int numberOfDocuments = 0;
 			int numberOfGoals = 0;
@@ -25,6 +33,9 @@ public class PercentageCalculation {
 					numberOfGoals += 1;
 				}
 			}
+			
+			f1.close();
+			f2.close();
 			
 			System.out.println((double) numberOfGoals / (double) numberOfDocuments);
 		}

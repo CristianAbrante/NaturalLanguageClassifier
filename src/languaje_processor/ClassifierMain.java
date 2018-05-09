@@ -1,7 +1,6 @@
 package languaje_processor;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,12 +13,24 @@ import languaje_processor.corpus.Corpus;
 import languaje_processor.parser.DocumentReader;
 import languaje_processor.vocabulary.Vocabulary;
 
+/**
+ * The Class ClassifierMain.
+ */
 public class ClassifierMain {
+	
 	/*
 	 * Params:
 	 * data/corpusTotal.txt
 	 * data/corpusA.txt data/corpusD.txt data/corpusI.txt
 	 *  FILE TO CLASSIFY OUTPUT CLASSIFY
+	 */
+	
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub

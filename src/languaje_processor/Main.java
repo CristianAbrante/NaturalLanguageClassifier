@@ -5,9 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import languaje_processor.corpus.Corpus;
-import languaje_processor.corpus.CorpusReader;
 import languaje_processor.parser.DocumentReader;
-import languaje_processor.token.Token;
 import languaje_processor.vocabulary.Vocabulary;
 
 /**

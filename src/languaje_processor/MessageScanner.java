@@ -24,7 +24,9 @@ public class MessageScanner {
 	/** The matcher. */
 	private Matcher matcher;
 	
+	/** The number of messages. */
 	private Integer numberOfMessages;
+	
 	/**
 	 * Instantiates a new message scanner.
 	 *
@@ -72,48 +74,99 @@ public class MessageScanner {
 		}
 	}
 	
+	/**
+	 * Reset parser.
+	 */
 	public void resetParser() {
 		matcher = messagePattern.matcher(messageList);
 	}
 	
-	/** Getters and Setters **/
-
+	/**
+	 *
+	 *
+	 * @return the message pattern buffer
+	 */
 	public String getMessagePatternBuffer() {
 		return messagePatternBuffer;
 	}
 
+	/**
+	 * Sets the message pattern buffer.
+	 *
+	 * @param messagePatternBuffer the new message pattern buffer
+	 */
 	public void setMessagePatternBuffer(String messagePatternBuffer) {
 		this.messagePatternBuffer = messagePatternBuffer;
 	}
 
+	/**
+	 * Gets the message pattern.
+	 *
+	 * @return the message pattern
+	 */
 	public Pattern getMessagePattern() {
 		return messagePattern;
 	}
 
+	/**
+	 * Sets the message pattern.
+	 *
+	 * @param messagePattern the new message pattern
+	 */
 	public void setMessagePattern(Pattern messagePattern) {
 		this.messagePattern = messagePattern;
 	}
 
+	/**
+	 * Gets the matcher.
+	 *
+	 * @return the matcher
+	 */
 	public Matcher getMatcher() {
 		return matcher;
 	}
 
+	/**
+	 * Sets the matcher.
+	 *
+	 * @param matcher the new matcher
+	 */
 	public void setMatcher(Matcher matcher) {
 		this.matcher = matcher;
 	}
 
+	/**
+	 * Gets the number of messages.
+	 *
+	 * @return the number of messages
+	 */
 	public Integer getNumberOfMessages() {
 		return numberOfMessages;
 	}
 
+	/**
+	 * Sets the number of messages.
+	 *
+	 * @param numberOfMessages the new number of messages
+	 */
 	public void setNumberOfMessages(Integer numberOfMessages) {
 		this.numberOfMessages = numberOfMessages;
 	}
 
+	/**
+	 * Gets the message list.
+	 *
+	 * @return the message list
+	 */
 	public String getMessageList() {
 		return messageList;
 	}
 	
+	/**
+	 * Sets the message list.
+	 *
+	 * @param messageList the new message list
+	 */
 	public void setMessageList(String messageList) {
 		this.messageList = messageList;
 	}
