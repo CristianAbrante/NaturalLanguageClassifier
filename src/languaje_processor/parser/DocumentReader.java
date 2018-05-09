@@ -6,7 +6,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import languaje_processor.token.Token;
 import languaje_processor.token.TokenType;
 
 /**
@@ -77,19 +76,19 @@ public class DocumentReader {
     }
   }
   
-  public Token nextToken() {
+  public String nextToken() {
     if (getCorpus() != null) {
       if (matcher.find()) {
         if (matcher.group(TokenType.WORD.name()) != null) {
-          return new Token(matcher.group(TokenType.WORD.name()).toLowerCase());
+          return matcher.group(TokenType.WORD.name()).toLowerCase();
         } else if (matcher.group(TokenType.URL.name()) != null) {
-          return new Token(TokenType.URL.getValue());
+          return TokenType.URL.getValue();
         } else if (matcher.group(TokenType.HASHTAG.name()) != null) {
-          return new Token(TokenType.HASHTAG.getValue());
+          return TokenType.HASHTAG.getValue();
         } else if (matcher.group(TokenType.NUMBER.name()) != null) {
-          return new Token(TokenType.NUMBER.getValue());
+          return TokenType.NUMBER.getValue();
         } else if (matcher.group(TokenType.MENTION.name()) != null) {
-          return new Token(TokenType.MENTION.getValue());
+          return TokenType.MENTION.getValue();
         } else {
           return null;
         }

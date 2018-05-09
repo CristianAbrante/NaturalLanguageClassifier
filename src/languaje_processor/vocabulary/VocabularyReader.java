@@ -31,9 +31,9 @@ public class VocabularyReader {
     }
   }
   
-  public Token nextToken() {
+  public String nextToken() {
     if (vocabularyScanner.hasNext()) {
-      return new Token(vocabularyScanner.next());
+      return vocabularyScanner.next();
     } else {
       return null;
     }

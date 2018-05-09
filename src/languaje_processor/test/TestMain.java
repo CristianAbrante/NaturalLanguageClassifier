@@ -4,11 +4,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import languaje_processor.MessageScanner;
+import languaje_processor.parser.DocumentReader;
 import languaje_processor.vocabulary.Vocabulary;
 
 public class TestMain {
 	public static void main(String[] args) throws IOException {
-			MessageScanner parserVocabulary = new MessageScanner("test/corpusTotal.txt");
+			DocumentReader parserVocabulary = new DocumentReader("test/corpusTotal.txt");
 			FileWriter outputVocabulary = new FileWriter("test/voc.txt");
 			MessageScanner parserCorpusA = new MessageScanner("test/corpusE.txt");
 			FileWriter outputCorpusA = new FileWriter("test/apreE.txt");

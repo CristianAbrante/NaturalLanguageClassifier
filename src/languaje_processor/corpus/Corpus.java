@@ -12,7 +12,8 @@ import languaje_processor.vocabulary.Vocabulary;
 import languaje_processor.token.*;
 
 public class Corpus {
-  
+	
+	private final Token UNKNOWN_TOKEN = new Token(TokenType.UNKNOWN.getValue());
 	private Set<Token> corpus;
 	private Vocabulary vocabulary;
 	private String name;
@@ -23,30 +24,37 @@ public class Corpus {
 		setCorpus(new TreeSet<Token>());
 		setVocabulary(vocabulary);
 		if (reader != null) {
-		  Token token = reader.nextToken();
-	    while (token != null) {
-	      addToCorpus(token);
-	      token = reader.nextToken();
-	    }
-	    numberOfDocuments = reader.getNumberOfDocuments();
-	    setLogProb();
+			String strToken = reader.nextToken();
+		    while (strToken != null) {
+		    	Token token = new Token(strToken);
+		    	addToken(token);
+		    	strToken = reader.nextToken();
+		    }
+		    numberOfDocuments = reader.getNumberOfDocuments();
+		    setAllTokensLogProb();
 		}
 	}
-
-	public Set<Token> getCorpus() {
-    return corpus;
-  }
 	
-	/**
-	 * @return the name
-	 */
+	public Set<Token> getCorpus() {
+		return corpus;
+	}
+	
+	public Vocabulary getVocabulary() {
+		return vocabulary;
+	}
+	
+	public Integer getNumberOfDocuments() {
+		return numberOfDocuments;
+	}
+
+	public Integer getNumberOfWords() {
+		return numberOfWords;
+	}
+	
 	public String getName() {
 		return name;
 	}
-
-	/**
-	 * @param name the name to set
-	 */
+	
 	public void setName(String name) {
 		if (name != null) {
 			this.name = name;
@@ -55,46 +63,54 @@ public class Corpus {
 		}
 	}
 
-	private void addToCorpus(Token token) {
-		if (this.contains(token)) {
-		  for (Token currentToken : getCorpus()) {
-		    if (currentToken.getValue().equals(token.getValue())) {
-          currentToken.incrementFrecuency();
-        }
-	    }
-		} else {
-			getCorpus().add(token);
-		}
-		numberOfWords += 1;
-	}
-
-	public boolean contains(Token token) {
-		if (token != null) {
-			return getCorpus().contains(token);
+	public void addToCorpus(String word) {
+		if (word != null) {
+			addToken(new Token(word));
+			setAllTokensLogProb();
 		} else {
 			throw new NullPointerException("token can't be null");
 		}
 	}
 
+	public boolean contains(String word) {
+		if (word != null) {
+			return getToken(word) != null;
+		} else {
+			throw new NullPointerException("token can't be null");
+		}
+	}
+	
+	public int getFrecuency(String word) {
+		if (word != null) {
+			Token token = getToken(word);
+			return token != null ? token.getFrecuency() : 0;
+		} else {
+			throw new NullPointerException("word can't be null");
+		}
+	}
+	
+	public double getLogProb(String word) {
+		if (word != null) {
+			Token token = getToken(word);
+			return token != null ? token.getLogProb() : UNKNOWN_TOKEN.getLogProb();
+		} else {
+			throw new NullPointerException("word can't be null");
+		}
+	}
+	
 	public void export(FileWriter file) throws IOException {
 		PrintWriter writer = new PrintWriter(file);
 		writer.println(String.format("%d", getNumberOfDocuments()));
 		writer.println(String.format("%d", getNumberOfWords()));
+		writer.println(
+		String.format("%s %d %.8f", UNKNOWN_TOKEN.getValue(), UNKNOWN_TOKEN.getFrecuency(), UNKNOWN_TOKEN.getLogProb()));
 		for (Token token : getCorpus()) {
 		  writer.println(
           String.format("%s %d %.8f", token.getValue(), token.getFrecuency(), token.getLogProb()));
 		}
 		writer.close();
 	}
-
-	public Integer getNumberOfDocuments() {
-		return numberOfDocuments;
-	}
-
-	public Integer getNumberOfWords() {
-		return numberOfWords;
-	}
-
+	
 	/** Getters and Setters **/
 
 	private void setCorpus(Set<Token> corpus) {
@@ -105,9 +121,6 @@ public class Corpus {
 		}
 	}
 
-	private Vocabulary getVocabulary() {
-		return vocabulary;
-	}
 
 	private void setVocabulary(Vocabulary vocabulary) {
 		if (vocabulary != null) {
@@ -117,18 +130,40 @@ public class Corpus {
 		}
 	}
 	
-	private Double getLogProb(Token word) {
-    if (word != null) {
-      return Math.log(((double) (word.getFrecuency() + 1))
-          / ((double) (getNumberOfWords() + getVocabulary().getNumberOfWords())));
-    } else {
-      throw new NullPointerException("word can't be null");
-    }
-  }
+	private Token getToken(String word) {
+		for (Token corpusToken : getCorpus()) {
+			if (corpusToken.getValue().equals(word)) {
+				return corpusToken;
+			}
+		}
+		return null;
+	}
 	
-	private void setLogProb() {
-	  for (Token token : getCorpus()) {
-	    token.setLogProb(getLogProb(token));
-	  }
+	private void addToken(Token token) {
+		numberOfWords += 1;
+		for (Token corpusToken : getCorpus()) {
+			if (token.getValue().equals(token.getValue())) {
+				corpusToken.incrementFrecuency();
+				return;
+			}
+		}
+		getCorpus().add(token);
+	}
+	
+	private void setAllTokensLogProb() {
+		setLogProb(UNKNOWN_TOKEN);
+		for (Token token : getCorpus()) {
+		    setLogProb(token);
+		}
+	}
+	
+	private void setLogProb(Token token) {
+	    if (token != null) {
+	    	double logProb = Math.log(((double) (token.getFrecuency() + 1))
+	  	          		   / ((double) (getNumberOfWords() + getVocabulary().getNumberOfWords())));
+	    	token.setLogProb(logProb);
+	    } else {
+	      throw new NullPointerException("word can't be null");
+	    }
 	}
 }
