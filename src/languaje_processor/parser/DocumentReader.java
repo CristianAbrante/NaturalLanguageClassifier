@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import languaje_processor.token.TokenType;
+import languaje_processor.utility.Constants;
 
 /**
  * The Class DocumentReader.
@@ -101,7 +102,10 @@ public class DocumentReader {
 		if (getCorpus() != null) {
 			if (matcher.find()) {
 				if (matcher.group(TokenType.WORD.name()) != null) {
-					return matcher.group(TokenType.WORD.name()).toLowerCase();
+					//if(!Constants.WORDS.contains(matcher.group(TokenType.WORD.name()).toLowerCase())) 
+						return matcher.group(TokenType.WORD.name()).toLowerCase();
+					//else
+						//return null;
 				} else if (matcher.group(TokenType.URL.name()) != null) {
 					return TokenType.URL.getValue();
 				} else if (matcher.group(TokenType.HASHTAG.name()) != null) {
