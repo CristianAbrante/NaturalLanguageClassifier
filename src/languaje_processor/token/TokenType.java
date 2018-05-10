@@ -18,6 +18,7 @@ public enum TokenType {
 	MENTION("@[\\w-_]+", "_MENTION_"),
 
 	/** The word. */
+	//WORD("[\\w-_]+(?:'(?:m|s|re|ve|ll|d|t))?", new String()),
 	WORD("[\\w-_]+(?:'(?:m|s|re|ve|ll|d|t))?", new String()),
 
 	/** The unknown. */

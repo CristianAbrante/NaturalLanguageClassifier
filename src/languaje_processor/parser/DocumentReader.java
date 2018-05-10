@@ -105,11 +105,13 @@ public class DocumentReader {
 				} else if (matcher.group(TokenType.URL.name()) != null) {
 					return TokenType.URL.getValue();
 				} else if (matcher.group(TokenType.HASHTAG.name()) != null) {
-					return TokenType.HASHTAG.getValue();
+					//return TokenType.HASHTAG.getValue();
+				  return matcher.group(TokenType.HASHTAG.name()).toLowerCase();
 				} else if (matcher.group(TokenType.NUMBER.name()) != null) {
 					return TokenType.NUMBER.getValue();
 				} else if (matcher.group(TokenType.MENTION.name()) != null) {
-					return TokenType.MENTION.getValue();
+					//return TokenType.MENTION.getValue();
+				  return matcher.group(TokenType.MENTION.name()).toLowerCase();
 				} else {
 					return null;
 				}
